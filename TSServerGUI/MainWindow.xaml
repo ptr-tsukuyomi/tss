@@ -1,0 +1,58 @@
+﻿<Window x:Class="TSServerGUI.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TSServerGUI"
+        mc:Ignorable="d"
+		xmlns:prism="http://prismlibrary.com/"
+		xmlns:System="clr-namespace:System;assembly=mscorlib"
+		xmlns:ComponentModel="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+		prism:ViewModelLocator.AutoWireViewModel="True"
+        Title="{Binding Title}" Height="480" Width="640" StateChanged="Window_StateChanged" Closing="Window_Closing">
+	<Window.Resources>
+		<CollectionViewSource x:Key="LogSrc" Source="{Binding Logs}" IsLiveSortingRequested="True">
+			<CollectionViewSource.LiveSortingProperties>
+				<System:String>CausedDateTime</System:String>
+			</CollectionViewSource.LiveSortingProperties>
+			<CollectionViewSource.SortDescriptions>
+				<ComponentModel:SortDescription Direction="Descending" PropertyName="CausedDateTime" />
+			</CollectionViewSource.SortDescriptions>
+		</CollectionViewSource>
+	</Window.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition />
+			<RowDefinition />
+			<RowDefinition Height="Auto" />
+		</Grid.RowDefinitions>
+
+		<ListView ItemsSource="{Binding Source={StaticResource LogSrc}}" Grid.Row="1">
+			<ListView.View>
+				<GridView AllowsColumnReorder="True">
+					<GridViewColumn DisplayMemberBinding="{Binding Path=CausedDateTime}" Header="日時" Width="Auto" />
+					<GridViewColumn DisplayMemberBinding="{Binding Path=ID}" Header="ID" Width="Auto" />
+					<GridViewColumn DisplayMemberBinding="{Binding Path=Msg}" Header="メッセージ" Width="Auto" />
+					<GridViewColumn DisplayMemberBinding="{Binding Path=Cause}" Header="発生場所" Width="Auto" />
+				</GridView>
+
+			</ListView.View>
+		</ListView>
+
+		<ListView Grid.Row="0" ItemsSource="{Binding Tuners}">
+			<ListView.View>
+				<GridView AllowsColumnReorder="True">
+					<GridViewColumn DisplayMemberBinding="{Binding}" Header="名前" Width="Auto" />
+				</GridView>
+			</ListView.View>
+		</ListView>
+		
+		<StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+			<Button Command="{Binding BtnCommand}" Margin="3,3,3,3">Test</Button>
+			<Button Command="{Binding BtnCommand2}" Margin="3,3,3,3">Stop</Button>
+		</StackPanel>
+		
+
+
+	</Grid>
+</Window>
